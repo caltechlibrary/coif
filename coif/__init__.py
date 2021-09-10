@@ -32,5 +32,4 @@ __license__     = 'BSD 3-clause'
 # Exports.
 # .............................................................................
 
-from .exceptions import ServiceError, NetworkError
-from .coif       import cover_image
+from .coif import cover_image
