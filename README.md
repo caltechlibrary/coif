@@ -1,10 +1,10 @@
-Template for software repositories by the Caltech Library
+Coif for software repositories by the Caltech Library
 =====================================================
 
-This is a template README file for software repositories.  This first paragraph of the README should summarize your software in a concise fashion, preferably using no more than one or two sentences.
+This is a coif README file for software repositories.  This first paragraph of the README should summarize your software in a concise fashion, preferably using no more than one or two sentences.
 
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=flat-square)](https://choosealicense.com/licenses/bsd-3-clause)
-[![Latest release](https://img.shields.io/github/v/release/caltechlibrary/template.svg?style=flat-square&color=b44e88)](https://github.com/caltechlibrary/template/releases)
+[![Latest release](https://img.shields.io/github/v/release/caltechlibrary/coif.svg?style=flat-square&color=b44e88)](https://github.com/caltechlibrary/coif/releases)
 [![DOI](https://data.caltech.edu/badge/201106666.svg)](https://data.caltech.edu/badge/latestdoi/201106666)
 
 
@@ -25,9 +25,9 @@ Table of contents
 Introduction
 ------------
 
-This repository is a GitHub template repository for creating software project repositories at the Caltech Library.  The [associated wiki page](https://github.com/caltechlibrary/template/wiki/Using-this-template-repo) explains how to use the template repository.
+This repository is a GitHub coif repository for creating software project repositories at the Caltech Library.  The [associated wiki page](https://github.com/caltechlibrary/coif/wiki/Using-this-coif-repo) explains how to use the coif repository.
 
-This README file is in Markdown format, and is meant to provide a template for README files as well an illustration of what the README file can be expected to look like.  For a software project, this [Introduction](#introduction) section &ndash; which you are presently reading &ndash; should provide background for the project, a brief explanation of what the project is about, and optionally, pointers to resources that can help orient readers.  Ideally, this section should be short.
+This README file is in Markdown format, and is meant to provide a coif for README files as well an illustration of what the README file can be expected to look like.  For a software project, this [Introduction](#introduction) section &ndash; which you are presently reading &ndash; should provide background for the project, a brief explanation of what the project is about, and optionally, pointers to resources that can help orient readers.  Ideally, this section should be short.
 
 
 Installation
@@ -98,6 +98,6 @@ This work was funded by the California Institute of Technology Library.
 <div align="center">
   <br>
   <a href="https://www.caltech.edu">
-    <img width="100" height="100" src="https://raw.githubusercontent.com/caltechlibrary/template/main/.graphics/caltech-round.png">
+    <img width="100" height="100" src="https://raw.githubusercontent.com/caltechlibrary/coif/main/.graphics/caltech-round.png">
   </a>
 </div>
