@@ -26,7 +26,7 @@ if __debug__:
 # Exported functions.
 # .............................................................................
 
-def cover_image(identifier, kind = 'isbn', size = 'S', cc_login = {}):
+def cover_image(identifier, kind = 'isbn', size = 'S', cc_login = ()):
     '''Contact various services and return an image (as binary data).
 
     The required argument "identifier" must be a book identifier such as an
@@ -63,10 +63,10 @@ def cover_image(identifier, kind = 'isbn', size = 'S', cc_login = {}):
     size = size.upper()
     if size not in ['S', 'M', 'L']:
         raise ValueError(f'Unrecognized size "{size}"')
-    cc_login = cc_login or {}
+    cc_login = cc_login or ()
 
     services = []
-    if kind == 'isbn' and 'user' in cc_login and 'password' in cc_login:
+    if kind == 'isbn' and cc_login and len(cc_login) == 2:
         services.append(cover_image_from_cc)
     services.append(cover_image_from_ol)
     if kind == 'isbn':
@@ -91,8 +91,7 @@ def cover_image_from_cc(isbn, kind, size, login):
         return None, None
     if not isbn:
         return None, None
-    user = get(login, 'user', '')
-    password = get(login, 'password', '')
+    user, password = login
     url = ('https://contentcafe2.btol.com/ContentCafe/jacket.aspx?'
            + f'UserID={user}&Password={password}&Return=T&Type={size}'
            + f'&Value={isbn}')
