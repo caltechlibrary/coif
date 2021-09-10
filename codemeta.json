@@ -6,7 +6,7 @@
   "codeRepository": "https://github.com/caltechlibrary/coif",
   "issueTracker": "https://github.com/caltechlibrary/coif/issues",
   "license": "https://github.com/caltechlibrary/coif/blob/main/LICENSE",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": [
     {
       "@type": "Person",
