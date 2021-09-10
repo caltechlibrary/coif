@@ -1,15 +1,13 @@
-Coif for software repositories by the Caltech Library
-=====================================================
+# Coif<img width="11%" align="right" src="https://github.com/caltechlibrary/coif/raw/main/.graphics/coif-icon.png">
 
-This is a coif README file for software repositories.  This first paragraph of the README should summarize your software in a concise fashion, preferably using no more than one or two sentences.
+Coif (_**Co**ver **i**mage **f**inder_) is a Python&nbsp;3 module for contacting multiple services to look for a book jacket image given an identifier such as an ISBN.
 
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=flat-square)](https://choosealicense.com/licenses/bsd-3-clause)
 [![Latest release](https://img.shields.io/github/v/release/caltechlibrary/coif.svg?style=flat-square&color=b44e88)](https://github.com/caltechlibrary/coif/releases)
 [![DOI](https://data.caltech.edu/badge/201106666.svg)](https://data.caltech.edu/badge/latestdoi/201106666)
 
 
-Table of contents
------------------
+## Table of contents
 
 * [Introduction](#introduction)
 * [Installation](#installation)
@@ -22,78 +20,91 @@ Table of contents
 * [Acknowledgments](#authors-and-acknowledgments)
 
 
-Introduction
-------------
+## Introduction
 
-This repository is a GitHub coif repository for creating software project repositories at the Caltech Library.  The [associated wiki page](https://github.com/caltechlibrary/coif/wiki/Using-this-coif-repo) explains how to use the coif repository.
+In a variety of situations involving library software systems, it's useful to show a small image of a book's cover or jacket. Coif (_**Co**ver **i**mage **f**inder_) is a simple Python&nbsp;3 library that looks for cover images using multiple network services. When it finds one, Coif returns the image in [JPEG](https://en.wikipedia.org/wiki/JPEG) format.
 
-This README file is in Markdown format, and is meant to provide a coif for README files as well an illustration of what the README file can be expected to look like.  For a software project, this [Introduction](#introduction) section &ndash; which you are presently reading &ndash; should provide background for the project, a brief explanation of what the project is about, and optionally, pointers to resources that can help orient readers.  Ideally, this section should be short.
+Coif is most similar to [bookcovers](https://github.com/e-e-e/bookcovers), a JavaScript library that performs federated search for book cover images. A Python package similar to Coif is [booker](https://github.com/krdyke/booker), but that one is limited to searching Google Books.
 
 
-Installation
-------------
+## Installation
 
-Begin this section by mentioning any prerequisites that may be important for users to have before they can use your software.  Examples include hardware and operating system requirements.
+The instructions below assume you have a Python interpreter installed on your computer; if that's not the case, please first [install Python version 3](INSTALL-Python3.md) and familiarize yourself with running Python programs on your system.
 
-Next, provide step-by-step instructions for installing the software, preferably with command examples that can be copy-pasted by readers into their software environments. For example:
-
-```bash
-a command-line command here
+On **Linux**, **macOS**, and **Windows** operating systems, you should be able to install `coif` with [`pip`](https://pip.pypa.io/en/stable/installing/).  To install `coif` from the [Python package repository (PyPI)](https://pypi.org), run the following command:
+```
+python3 -m pip install coif
 ```
 
-Sometimes, subsections may be needed for different operating systems or particularly complicated installations.
- 
-
-Usage
------
-
-This [Usage](#usage) section would explain more about how to run the software, what kind of behavior to expect, and so on.
-
-### _Basic operation_
-
-Begin with the simplest possible example of how to use your software.  Provide example command lines and/or screen images, as appropriate, to help readers understand how the software is expected to be used.  Many readers are likely to look for command lines they can copy-paste directly from your explanations, so it's best to keep that in mind as you write examples.
-
-### _Additional options_
-
-Some projects need to communicate additional information to users and can benefit from additional sections in the README file.  It's difficult to give specific instructions &ndash; a lot depends on your software, your intended audience, etc.  Use your judgment and ask for feedback from users or colleagues to help figure out what else is worth explaining.
+As an alternative to getting it from [PyPI](https://pypi.org), you can use `pip` to install `coif` directly from GitHub, like this:
+```sh
+python3 -m pip install git+https://github.com/caltechlibrary/coif.git
+```
 
 
-Known issues and limitations
-----------------------------
+## Usage
 
-In this section, summarize any notable issues and/or limitations of your software.  If none are known yet, this section can be omitted (and don't forget to remove the corresponding entry in the [Table of Contents](#table-of-contents) too); alternatively, you can leave this section in and write something along the lines of "none are known at this time".
+Coif currently offers only an application programming interface (API); it does not offer a command-line interface. The main interface point is the function `cover_image(...)`. Here is a simple demonstration of using it:
+
+```python
+from coif import cover_image
+
+(url, image) = cover_image('9781479837243')
+if image:
+    with open('image.jpg', 'wb') as image_file:
+        image_file.write(image)
+else:
+    print('Unable to find image')
+```
+
+As illustrated above, `cover_image` returns **two** values: a URL, and a JPEG image in binary form (if a cover image is found).
 
 
-Getting help
-------------
+### Arguments to `cover_image`
 
-Inform readers of how they can contact you, or at least how they can report problems they may encounter.  This may simply be a request to use the issue tracker on your repository, but many projects have associated chat or mailing lists, and this section is a good place to mention those.
+The function takes one required argument, an identifier (preferably an [ISBN](https://en.wikipedia.org/wiki/International_Standard_Book_Number), but possibly other kinds of identifiers), and additional optional arguments. In more detail, the possible arguments are:
 
-
-Contributing
-------------
-
-This section is optional; if your repository is for a project that accepts open-source contributions, then this section is where you can mention how people can offer contributions, and point them to your guidelines for contributing.  (If you delete this section, don't forget to remove the corresponding entry in the [Table of Contents](#table-of-contents) too.)
+* `identifier` (required): an ISBN, OCLC id, LCCN id, OLID and or Open Library [Cover ID](https://openlibrary.org/dev/docs/api/covers). Note that only Open Library accepts anything other than ISBN, so your best bet for finding a cover image is to use an ISBN. Conversely, if you provide anything other than an ISBN, `cover_image` will only contact Open Library.
+* `kind` (optional): the kind of identifier given as the first argument. Recognized values are `isbn`, `lccn`, `olid`, `oclc`, and `coverid`. The default is `isbn`.
+* `size` (optional): one of the letters `S`, `M`, or `L`, to indicate a preference for small, medium, or large images, respectively. Some cover images may exist in one size and not another, and there is no way to know in advance which size may be available from a service without actually downloading the image. If a `size` is provided, `cover_image` will ask for that size _and smaller_; for example, if you call it with `size = 'M'`, it will try to find `M` first and if none exists, it will try `S`. By default, it wil _only_ try `S`. If you want to get the largest image you can find, call it with `size = 'L'`.
+* `cc_login` (optional): one of the best services for finding cover images is [Content Cafè 2](http://www.baker-taylor.com/pdfs/content_cafe.pdf) from Baker & Talor, but it requires an account. If you have a user id and password with their service, provide the credentials as a tuple of values `("user", "password")` to the optional argument `cc_login`.
 
 
-License
--------
+### Why `cover_image` always returns an image
+
+A frustrating aspect of many of the services is that they provide no way to simply ask whether an image exists. If the services do not have an image for a given identifier, most return a small placeholder image (often containing rendered text to the effect of "no cover found") instead of returning a failure code of some kind. Consequently, `cover_image` must always download images and test them against some size thresholds to determine if it got a placeholder or an actual cover image. This is the reason why the return values from `cover_image` are both a URL and an image: it has already downloaded the image, so it may as well return it, to save the caller the trouble of downloading the image a second time.
+
+
+## Known issues and limitations
+
+Although the [Open Library Covers API](https://openlibrary.org/dev/docs/api/covers) accepts multiple types of identifiers such as an ISBN, OCLC, LCCN, and more, other services only accept ISBNs. Thus, while you can pass any of these types of identifiers to Coif, if what you use is _not_ an ISBN, then Coif will only contact the Open Library's service.
+
+
+## Getting help
+
+If you find an issue, please submit it in [the GitHub issue tracker](https://github.com/caltechlibrary/coif/issues) for this repository.
+
+
+## Contributing
+
+We would be happy to receive your help and participation with enhancing Coif!  Please visit the [guidelines for contributing](CONTRIBUTING.md) for some tips on getting started.
+
+
+## License
 
 Software produced by the Caltech Library is Copyright © 2021 California Institute of Technology.  This software is freely distributed under a BSD/MIT type license.  Please see the [LICENSE](LICENSE) file for more information.
 
 
-Authors and history
----------------------------
+## Authors and history
 
 In this section, list the authors and contributors to your software project.  Adding additional notes here about the history of the project can make it more interesting and compelling.  This is also a place where you can acknowledge other contributions to the work and the use of other people's software or tools.
 
 
-Acknowledgments
----------------
+## Acknowledgments
 
 This work was funded by the California Institute of Technology Library.
 
-(If this work was also supported by other organizations, acknowledge them here.  In addition, if your work relies on software libraries, or was inspired by looking at other work, it is appropriate to acknowledge this intellectual debt too.)
+The [vector artwork](https://thenounproject.com/term/hair/1710638/) of a man's coiffure, used as the icon for this project, was created by [sarah](https://thenounproject.com/saifulbachrisitubondo/) from the Noun Project.  It is licensed under the Creative Commons [CC-BY 3.0](https://creativecommons.org/licenses/by/3.0/) license. I edited the logo in [Boxy SVG](https://boxy-svg.com), a native SVG editor for macOS to change the icon color to the orange used by Caltech in their logo.
 
 <div align="center">
   <br>
